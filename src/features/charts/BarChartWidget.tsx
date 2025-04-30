@@ -61,6 +61,9 @@ export default function BarChartWidget({ widget }: BarChartWidgetProps) {
     );
   }
 
+  // Default to showing legend unless explicitly set to false
+  const showLegend = widget.config.showLegend !== false;
+
   return (
     <div className="h-full p-4">
       <ResponsiveContainer width="100%" height="100%">
@@ -82,8 +85,8 @@ export default function BarChartWidget({ widget }: BarChartWidgetProps) {
             }} 
           />
           <Tooltip />
-          <Legend />
-          {Array.isArray(widget.config.values) ? (
+          {showLegend && <Legend />}
+          {Array.isArray(widget.config.values) && widget.config.values.length > 0 ? (
             // Multiple bars (one for each value in values array)
             widget.config.values.map((value, index) => (
               <Bar

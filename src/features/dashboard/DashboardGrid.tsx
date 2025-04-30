@@ -13,7 +13,7 @@ interface DashboardGridProps {
 }
 
 export default function DashboardGrid({ className }: DashboardGridProps) {
-  const { widgets, updateWidgetLayout } = useDashboardStore();
+  const { widgets, updateWidgetLayout, removeWidget } = useDashboardStore();
   const [isEditing, setIsEditing] = useState(false);
   const gridContainerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(1200); // Default width
@@ -70,19 +70,24 @@ export default function DashboardGrid({ className }: DashboardGridProps) {
     [isEditing, updateWidgetLayout]
   );
 
+  // Handle widget deletion
+  const handleDeleteWidget = useCallback((widgetId: string) => {
+    // Confirm before deleting
+    if (window.confirm('Are you sure you want to delete this widget?')) {
+      removeWidget(widgetId);
+    }
+  }, [removeWidget]);
+
   return (
-    <div className="flex flex-col w-full h-full bg-white">
-      <div className="flex justify-between items-center p-3 border-b">
-        <h2 className="text-xl font-bold">Dashboard</h2>
-        <div>
-          <button
-            className="px-3 py-1 bg-black text-white rounded-md hover:bg-gray-800 transition-colors text-sm"
-            onClick={() => setIsEditing(!isEditing)}
-          >
-            {isEditing ? 'Save Layout' : 'Edit Layout'}
-          </button>
-        </div>
-      </div>
+    <div className="flex flex-col w-full h-full bg-white relative">
+      {/* Floating edit button in top right corner */}
+      <button
+        className="absolute top-4 right-4 left-auto px-1 py-1 bg-slate-900 text-white rounded-md hover:bg-slate-800 transition-colors text-sm z-10 shadow-md"
+        onClick={() => setIsEditing(!isEditing)}
+        style={{ right: '1rem', left: 'auto' }}
+      >
+        {isEditing ? 'Save Layout' : 'Edit Layout'}
+      </button>
 
       <div 
         ref={gridContainerRef} 
@@ -110,12 +115,14 @@ export default function DashboardGrid({ className }: DashboardGridProps) {
             margin={[10, 10]}
             containerPadding={[5, 5]}
             style={{ height: '100%' }}
+            draggableHandle=".widget-drag-handle"
           >
             {widgets.map((widget) => (
               <div key={widget.id} className="h-full">
                 <WidgetContainer 
                   widget={widget} 
                   isEditing={isEditing}
+                  onDelete={() => handleDeleteWidget(widget.id)}
                 />
               </div>
             ))}

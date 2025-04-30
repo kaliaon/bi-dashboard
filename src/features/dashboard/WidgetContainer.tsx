@@ -1,29 +1,38 @@
-import { useState } from 'react';
-import { Widget, useDashboardStore } from '@/store/dashboardStore';
+import { useRef } from 'react';
+import { Widget } from '@/store/dashboardStore';
 import LineChartWidget from '@/features/charts/LineChartWidget';
 import BarChartWidget from '@/features/charts/BarChartWidget';
 import PieChartWidget from '@/features/charts/PieChartWidget';
-import DataTableWidget from '@/features/data/DataTableWidget';
+import TableChartWidget from '@/features/charts/TableChartWidget';
+import { useDataStore } from '@/store/dataStore';
+import { useModalStore } from '@/store/modalStore';
 
 interface WidgetContainerProps {
   widget: Widget;
   isEditing: boolean;
+  onDelete?: () => void;
 }
 
-export default function WidgetContainer({ 
-  widget, 
-  isEditing 
-}: WidgetContainerProps) {
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const { removeWidget, setActiveWidget } = useDashboardStore();
-
-  const handleWidgetClick = () => {
-    if (isEditing) {
-      setActiveWidget(widget.id);
+export default function WidgetContainer({ widget, isEditing, onDelete }: WidgetContainerProps) {
+  const { getDataSourceById } = useDataStore();
+  const { openWidgetSettings } = useModalStore();
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Get data source for this widget
+  const dataSource = widget.dataSource 
+    ? getDataSourceById(widget.dataSource) 
+    : undefined;
+  
+  // Determine what content to display based on widget type
+  const renderContent = () => {
+    if (!dataSource && widget.type !== 'text') {
+      return (
+        <div className="h-full flex items-center justify-center text-gray-500">
+          <p>No data source selected</p>
+        </div>
+      );
     }
-  };
 
-  const renderWidgetContent = () => {
     switch (widget.type) {
       case 'line':
         return <LineChartWidget widget={widget} />;
@@ -32,90 +41,66 @@ export default function WidgetContainer({
       case 'pie':
         return <PieChartWidget widget={widget} />;
       case 'table':
-        return <DataTableWidget widget={widget} />;
+        return <TableChartWidget widget={widget} />;
+      case 'text':
+        return (
+          <div className="p-4 h-full overflow-auto">
+            <div dangerouslySetInnerHTML={{ __html: widget.config.content || 'No content' }} />
+          </div>
+        );
       default:
-        return <div className="p-4">Unknown widget type</div>;
+        return <div>Unknown widget type</div>;
+    }
+  };
+
+  // Handle opening settings with stopPropagation to prevent drag
+  const handleSettingsClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Stop event from bubbling up to drag handlers
+    openWidgetSettings(widget);
+  };
+
+  // Handle delete with stopPropagation to prevent drag
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Stop event from bubbling up to drag handlers
+    if (onDelete) {
+      onDelete();
     }
   };
 
   return (
-    <div 
-      className={`flex flex-col h-full bg-white border rounded-lg shadow-sm overflow-hidden
-        ${isEditing ? 'border-blue-500 cursor-move' : 'border-gray-200'}
-      `}
-      onClick={handleWidgetClick}
-    >
+    <div ref={containerRef} className="relative bg-white rounded-lg shadow-md flex flex-col h-full w-full overflow-hidden">
       <div className="flex justify-between items-center px-4 py-2 border-b bg-gray-50">
-        <h3 className="font-medium truncate">{widget.title}</h3>
+        {/* Add a separate drag handle area to allow dragging from the title area only */}
+        <h3 className="font-medium truncate widget-drag-handle flex-grow cursor-move">
+          {widget.title}
+        </h3>
         
-        <div className="p-1 absolute top-2 right-2 flex space-x-2 bg-white/80 backdrop-blur-sm rounded shadow-sm">
-          {isEditing && (
-            <>
+        {isEditing && (
+          <div 
+            className="flex space-x-2"
+            onClick={(e) => e.stopPropagation()} // Stop event bubbling for the button container
+          >
+            <button
+              onClick={handleSettingsClick}
+              className="px-2 py-1 text-sm font-medium rounded border shadow-sm bg-white text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+            >
+              Settings
+            </button>
+            {onDelete && (
               <button
-                onClick={() => setIsSettingsOpen(!isSettingsOpen)}
-                className="text-gray-500 hover:text-gray-700 p-1 rounded"
-                aria-label="Edit widget settings"
+                onClick={handleDeleteClick}
+                className="px-2 py-1 text-sm font-medium rounded border shadow-sm bg-white text-red-600 hover:bg-red-50"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-3 w-3"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
+                Delete
               </button>
-              <button
-                onClick={() => removeWidget(widget.id)}
-                className="text-gray-500 hover:text-red-500 p-1 rounded"
-                aria-label="Remove widget"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-3 w-3"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={1.5}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
-              </button>
-            </>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
       
-      <div className="flex-1 overflow-hidden">
-        {renderWidgetContent()}
+      <div className="flex-grow">
+        {renderContent()}
       </div>
-      
-      {isSettingsOpen && isEditing && (
-        <div className="p-4 border-t">
-          <h4 className="font-medium mb-2">Widget Settings</h4>
-          {/* Widget settings would go here */}
-          {/* This would include data source selection, chart options, etc. */}
-          <p className="text-sm text-gray-500">
-            Settings panel for {widget.title}
-          </p>
-        </div>
-      )}
     </div>
   );
 } 

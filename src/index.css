@@ -99,6 +99,50 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* Form input and select styles to ensure proper padding and appearance */
+input, select {
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background-color: white;
+  color: #111827;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Select appearance fixes */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+}
+
+/* This ensures inputs match selects, accounting for the dropdown arrow space */
+input.form-field {
+  padding-right: 2.5rem;
+}
+
+/* Modal content background */
+.modal-container {
+  background-color: white;
+}
+.dark .modal-container {
+  background-color: #1f2937;
+}
+
+/* Modal positioning fixes */
+.fixed.inset-0.flex.items-center.justify-center {
+  position: fixed !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

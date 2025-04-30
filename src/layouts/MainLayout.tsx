@@ -93,33 +93,6 @@ export default function MainLayout({
 
       {/* Main content */}
       <div className="flex-1 flex flex-col w-full h-full">
-        {/* Header */}
-        <header className="bg-white shadow-sm h-16 flex items-center justify-between px-6 border-b border-slate-200">
-          <div className="flex items-center">
-            <button 
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-1.5 rounded-md hover:bg-slate-100 text-slate-700 md:hidden mr-2"
-            >
-              <Menu size={20} />
-            </button>
-            <h2 className="text-lg font-medium text-slate-800 capitalize">{currentRoute}</h2>
-          </div>
-          
-          <div className="flex items-center space-x-3">
-            <button
-              className="px-3.5 py-2 bg-slate-900 text-white rounded-md hover:bg-slate-800 transition-colors flex items-center gap-1.5 text-sm font-medium shadow-sm"
-            >
-              <PlusSquare size={16} />
-              <span>Add Widget</span>
-            </button>
-            <button
-              className="w-9 h-9 rounded-full hover:bg-slate-100 transition-colors text-slate-700 flex items-center justify-center"
-              aria-label="User menu"
-            >
-              <User size={20} />
-            </button>
-          </div>
-        </header>
 
         {/* Content */}
         <main className="flex-1 overflow-auto w-full p-6">

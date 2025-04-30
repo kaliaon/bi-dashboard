@@ -85,6 +85,11 @@ export default function PieChartWidget({ widget }: PieChartWidgetProps) {
     );
   }
 
+  // Default to showing legend unless explicitly set to false
+  const showLegend = widget.config.showLegend !== false;
+  // Use configured colors or default colors
+  const colors = widget.config.colors || COLORS;
+
   return (
     <div className="h-full p-4">
       <ResponsiveContainer width="100%" height="100%">
@@ -102,14 +107,14 @@ export default function PieChartWidget({ widget }: PieChartWidgetProps) {
             {chartData.map((entry, index) => (
               <Cell 
                 key={`cell-${index}`} 
-                fill={widget.config.colors?.[index] || COLORS[index % COLORS.length]} 
+                fill={colors[index % colors.length]} 
               />
             ))}
           </Pie>
           <Tooltip 
             formatter={(value) => [`${value}`, widget.config.valueLabel || 'Value']} 
           />
-          <Legend />
+          {showLegend && <Legend />}
         </PieChart>
       </ResponsiveContainer>
     </div>

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type WidgetType = 'line' | 'bar' | 'pie' | 'table';
+export type WidgetType = 'line' | 'bar' | 'pie' | 'table' | 'text';
 
 export interface Widget {
   id: string;
