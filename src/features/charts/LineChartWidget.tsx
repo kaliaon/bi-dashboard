@@ -12,12 +12,14 @@ import {
 import { Widget } from '@/store/dashboardStore';
 import { useDataStore } from '@/store/dataStore';
 import { filterData } from '@/services/dataService';
+import { useTranslation } from 'react-i18next';
 
 interface LineChartWidgetProps {
   widget: Widget;
 }
 
 export default function LineChartWidget({ widget }: LineChartWidgetProps) {
+  const { t } = useTranslation('common');
   const { getDataSourceById } = useDataStore();
   
   const chartData = useMemo(() => {
@@ -50,11 +52,11 @@ export default function LineChartWidget({ widget }: LineChartWidgetProps) {
     return (
       <div className="flex items-center justify-center h-full p-4 text-gray-500">
         <div className="text-center">
-          <p className="mb-2">No data available</p>
+          <p className="mb-2">{t('charts.noDataAvailable')}</p>
           <p className="text-sm">
             {!widget.dataSource
-              ? 'Please select a data source'
-              : 'Check your data source and widget configuration'}
+              ? t('charts.selectDataSource')
+              : t('charts.checkConfiguration')}
           </p>
         </div>
       </div>

@@ -1,0 +1,53 @@
+{
+  "title": "Dashboard",
+  "addWidget": "Add Widget",
+  "widgetSettings": {
+    "title": "Add New Widget",
+    "widgetTitle": "Widget Title",
+    "widgetTitlePlaceholder": "Enter widget title",
+    "widgetType": "Widget Type",
+    "dataSource": "Data Source",
+    "noDataSource": "No data source selected",
+    "types": {
+      "line": "Line Chart",
+      "bar": "Bar Chart",
+      "pie": "Pie Chart",
+      "table": "Table"
+    }
+  },
+  "noWidgets": "No widgets added yet",
+  "getStarted": "Get started by clicking the \"Add Widget\" button to create your first visualization.",
+  "widgetActions": {
+    "edit": "Edit Widget",
+    "delete": "Delete Widget",
+    "refresh": "Refresh Data"
+  },
+  "confirmDeleteWidget": "Are you sure you want to delete this widget?",
+  "saveLayout": "Save Layout",
+  "editLayout": "Edit Layout",
+  "defaultDashboardName": "My Dashboard",
+  "noContent": "No content",
+  "unknownWidgetType": "Unknown widget type",
+  "editWidgetTitle": "Edit Widget: {{name}}",
+  "widget": "Widget",
+  "chartSettings": {
+    "title": "Chart Settings",
+    "xAxis": "X Axis",
+    "yAxis": "Y Axis",
+    "categoryXAxis": "Category (X Axis)",
+    "valuesYAxis": "Values (Y Axis)",
+    "categorySlices": "Category (Slices)",
+    "value": "Value",
+    "selectColumn": "Select a column",
+    "selectDataSource": "Select a data source",
+    "selectedColumns": "Selected {{count}} of {{total}} columns",
+    "noColumnsSelected": "No columns selected",
+    "noColumnsSelectedAll": "No columns selected (all will be shown)",
+    "columnsToDisplay": "Columns to Display",
+    "showLegend": "Show Legend",
+    "noSettingsAvailable": "No settings available for this widget type",
+    "saveChanges": "Save Changes",
+    "saved": "Saved",
+    "error": "Error"
+  }
+} 

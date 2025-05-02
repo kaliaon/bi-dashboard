@@ -1,0 +1,34 @@
+{
+  "title": "Data Sources",
+  "subtitle": "Import, manage, and preview your data sources",
+  "addDataSource": "Add Data Source",
+  "import": "Import",
+  "upload": "Upload",
+  "dataSourceSettings": {
+    "title": "Add New Data Source",
+    "dataSourceName": "Data Source Name",
+    "dataSourceNamePlaceholder": "Enter data source name",
+    "dataSourceType": "Data Source Type",
+    "uploadFile": "Upload File",
+    "dragAndDrop": "Drag and drop file here, or click to select",
+    "formats": "Supported formats: CSV, JSON, Excel"
+  },
+  "noDataSources": "No data sources added yet. Click 'Add Data Source' to get started.",
+  "dataSourceActions": {
+    "view": "View Data",
+    "edit": "Edit",
+    "delete": "Delete data source"
+  },
+  "columns": "Columns",
+  "rows": "Rows",
+  "dataPreview": "Data Preview",
+  "yourDataSources": "Your Data Sources",
+  "importCSV": "Import CSV Data",
+  "importSuccess": "Import Successful",
+  "importAnother": "Import Another File",
+  "successMessage": "Your CSV data has been imported and is now available for use in your dashboard.",
+  "clickToBrowse": "or click to browse files",
+  "noDataSourceAvailable": "No data source available",
+  "rowCount": "{{count}} rows",
+  "showingRows": "Showing {{showing}} of {{total}} rows"
+} 

@@ -1,0 +1,53 @@
+{
+  "title": "Панель управления",
+  "addWidget": "Добавить виджет",
+  "widgetSettings": {
+    "title": "Добавить новый виджет",
+    "widgetTitle": "Название виджета",
+    "widgetTitlePlaceholder": "Введите название виджета",
+    "widgetType": "Тип виджета",
+    "dataSource": "Источник данных",
+    "noDataSource": "Источник данных не выбран",
+    "types": {
+      "line": "Линейный график",
+      "bar": "Столбчатый график",
+      "pie": "Круговая диаграмма",
+      "table": "Таблица"
+    }
+  },
+  "noWidgets": "Виджеты еще не добавлены",
+  "getStarted": "Нажмите кнопку \"Добавить виджет\", чтобы создать свою первую визуализацию.",
+  "widgetActions": {
+    "edit": "Редактировать виджет",
+    "delete": "Удалить виджет",
+    "refresh": "Обновить данные"
+  },
+  "confirmDeleteWidget": "Вы уверены, что хотите удалить этот виджет?",
+  "saveLayout": "Сохранить макет",
+  "editLayout": "Редактировать макет",
+  "defaultDashboardName": "Моя панель управления",
+  "noContent": "Нет содержимого",
+  "unknownWidgetType": "Неизвестный тип виджета",
+  "editWidgetTitle": "Редактировать виджет: {{name}}",
+  "widget": "Виджет",
+  "chartSettings": {
+    "title": "Настройки графика",
+    "xAxis": "Ось X",
+    "yAxis": "Ось Y",
+    "categoryXAxis": "Категория (ось X)",
+    "valuesYAxis": "Значения (ось Y)",
+    "categorySlices": "Категория (сегменты)",
+    "value": "Значение",
+    "selectColumn": "Выберите столбец",
+    "selectDataSource": "Выберите источник данных",
+    "selectedColumns": "Выбрано {{count}} из {{total}} столбцов",
+    "noColumnsSelected": "Столбцы не выбраны",
+    "noColumnsSelectedAll": "Столбцы не выбраны (будут показаны все)",
+    "columnsToDisplay": "Столбцы для отображения",
+    "showLegend": "Показать легенду",
+    "noSettingsAvailable": "Нет доступных настроек для этого типа виджета",
+    "saveChanges": "Сохранить изменения",
+    "saved": "Сохранено",
+    "error": "Ошибка"
+  }
+} 

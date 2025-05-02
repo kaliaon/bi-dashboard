@@ -1,0 +1,39 @@
+{
+  "app": {
+    "title": "Data Dashboard",
+    "loading": "Loading...",
+    "saving": "Saving...",
+    "success": "Success!",
+    "error": "Error occurred",
+    "save": "Save",
+    "cancel": "Cancel",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "close": "Close"
+  },
+  "export": {
+    "title": "Export",
+    "exporting": "Exporting...",
+    "success": "Dashboard successfully exported as {{format}}",
+    "error": "Failed to export as {{format}}. {{message}}",
+    "options": {
+      "json": "Export as JSON",
+      "pdf": "Export as PDF",
+      "image": "Export as Image"
+    }
+  },
+  "charts": {
+    "noDataAvailable": "No data available",
+    "selectDataSource": "Please select a data source",
+    "checkConfiguration": "Check your data source and widget configuration",
+    "value": "Value"
+  },
+  "pagination": {
+    "firstPage": "First page",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "lastPage": "Last page"
+  }
+} 

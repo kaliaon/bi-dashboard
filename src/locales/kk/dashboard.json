@@ -1,0 +1,53 @@
+{
+  "title": "Басқару тақтасы",
+  "addWidget": "Виджет қосу",
+  "widgetSettings": {
+    "title": "Жаңа виджет қосу",
+    "widgetTitle": "Виджет атауы",
+    "widgetTitlePlaceholder": "Виджет атауын енгізіңіз",
+    "widgetType": "Виджет түрі",
+    "dataSource": "Деректер көзі",
+    "noDataSource": "Деректер көзі таңдалмаған",
+    "types": {
+      "line": "Сызықтық диаграмма",
+      "bar": "Жолақты диаграмма",
+      "pie": "Дөңгелек диаграмма",
+      "table": "Кесте"
+    }
+  },
+  "noWidgets": "Әлі виджеттер қосылмаған",
+  "getStarted": "Бірінші визуализацияңызды құру үшін \"Виджет қосу\" түймесін басыңыз.",
+  "widgetActions": {
+    "edit": "Виджетті өңдеу",
+    "delete": "Виджетті жою",
+    "refresh": "Деректерді жаңарту"
+  },
+  "confirmDeleteWidget": "Бұл виджетті жойғыңыз келетініне сенімдісіз бе?",
+  "saveLayout": "Макетті сақтау",
+  "editLayout": "Макетті өңдеу",
+  "defaultDashboardName": "Менің басқару тақтам",
+  "noContent": "Мазмұн жоқ",
+  "unknownWidgetType": "Белгісіз виджет түрі",
+  "editWidgetTitle": "Виджетті өңдеу: {{name}}",
+  "widget": "Виджет",
+  "chartSettings": {
+    "title": "Диаграмма параметрлері",
+    "xAxis": "X осі",
+    "yAxis": "Y осі",
+    "categoryXAxis": "Санат (X осі)",
+    "valuesYAxis": "Мәндер (Y осі)",
+    "categorySlices": "Санат (бөліктер)",
+    "value": "Мән",
+    "selectColumn": "Бағанды таңдаңыз",
+    "selectDataSource": "Деректер көзін таңдаңыз",
+    "selectedColumns": "{{total}} бағаннан {{count}} таңдалды",
+    "noColumnsSelected": "Бағандар таңдалмаған",
+    "noColumnsSelectedAll": "Бағандар таңдалмаған (барлығы көрсетіледі)",
+    "columnsToDisplay": "Көрсетілетін бағандар",
+    "showLegend": "Легенданы көрсету",
+    "noSettingsAvailable": "Бұл виджет түрі үшін параметрлер жоқ",
+    "saveChanges": "Өзгерістерді сақтау",
+    "saved": "Сақталды",
+    "error": "Қате"
+  }
+} 

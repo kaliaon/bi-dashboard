@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Widget, useDashboardStore } from '@/store/dashboardStore';
 import { useDataStore } from '@/store/dataStore';
+import { useTranslation } from 'react-i18next';
 
 interface WidgetSettingsProps {
   widget: Widget;
@@ -13,6 +14,7 @@ const DEFAULT_COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '
 export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps) {
   const { updateWidget } = useDashboardStore();
   const { getDataSourceById, dataSources } = useDataStore();
+  const { t } = useTranslation(['dashboard', 'common']);
   
   // Local state for form values
   const [title, setTitle] = useState(widget.title);
@@ -160,14 +162,14 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
   const renderLineChartSettings = () => (
     <div className="grid grid-cols-1 gap-3 mb-3">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">X Axis</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">{t('chartSettings.xAxis')}</label>
         <select
           value={settings.x}
           onChange={(e) => handleSettingChange('x', e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm"
           style={{color: '#111827'}}
         >
-          <option value="">Select a column</option>
+          <option value="">{t('chartSettings.selectColumn')}</option>
           {availableColumns.map(column => (
             <option key={column} value={column}>{column}</option>
           ))}
@@ -175,14 +177,14 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
       </div>
       
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Y Axis</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">{t('chartSettings.yAxis')}</label>
         <select
           value={settings.y}
           onChange={(e) => handleSettingChange('y', e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm"
           style={{color: '#111827'}}
         >
-          <option value="">Select a column</option>
+          <option value="">{t('chartSettings.selectColumn')}</option>
           {availableColumns.map(column => (
             <option key={column} value={column}>{column}</option>
           ))}
@@ -195,14 +197,14 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
   const renderBarChartSettings = () => (
     <div className="grid grid-cols-1 gap-3 mb-3">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Category (X Axis)</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">{t('chartSettings.categoryXAxis')}</label>
         <select
           value={settings.category}
           onChange={(e) => handleSettingChange('category', e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm"
           style={{color: '#111827'}}
         >
-          <option value="">Select a column</option>
+          <option value="">{t('chartSettings.selectColumn')}</option>
           {availableColumns.map(column => (
             <option key={column} value={column}>{column}</option>
           ))}
@@ -210,20 +212,36 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
       </div>
       
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Values (Y Axis)</label>
-        <select
-          multiple
-          value={settings.values || []}
-          onChange={handleValuesChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm"
-          style={{color: '#111827'}}
-          size={3} // Fixed size to avoid overflow
-        >
+        <label className="block text-sm font-medium text-gray-700 mb-1">{t('chartSettings.valuesYAxis')}</label>
+        <div className="max-h-64 overflow-y-auto border border-gray-300 rounded-md p-2">
           {availableColumns.map(column => (
-            <option key={column} value={column}>{column}</option>
+            <div key={column} className="flex items-center py-1">
+              <input
+                type="checkbox"
+                id={`y-value-${column}`}
+                checked={settings.values?.includes(column) || false}
+                onChange={(e) => {
+                  const isChecked = e.target.checked;
+                  handleSettingChange('values', 
+                    isChecked 
+                      ? [...(settings.values || []), column] 
+                      : (settings.values || []).filter((c: string) => c !== column)
+                  );
+                }}
+                className="h-4 w-4 text-blue-600 rounded border-gray-300"
+                style={{ width: 'auto', padding: '0' }}
+              />
+              <label htmlFor={`y-value-${column}`} className="ml-2 block text-sm text-gray-700">
+                {column}
+              </label>
+            </div>
           ))}
-        </select>
-        <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
+        </div>
+        <p className="text-xs text-gray-500 mt-1">
+          {settings.values?.length 
+            ? t('chartSettings.selectedColumns', { count: settings.values.length, total: availableColumns.length })
+            : t('chartSettings.noColumnsSelected')}
+        </p>
       </div>
     </div>
   );
@@ -232,14 +250,14 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
   const renderPieChartSettings = () => (
     <div className="grid grid-cols-1 gap-3 mb-3">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Category (Slices)</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">{t('chartSettings.categorySlices')}</label>
         <select
           value={settings.category}
           onChange={(e) => handleSettingChange('category', e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm"
           style={{color: '#111827'}}
         >
-          <option value="">Select a column</option>
+          <option value="">{t('chartSettings.selectColumn')}</option>
           {availableColumns.map(column => (
             <option key={column} value={column}>{column}</option>
           ))}
@@ -247,14 +265,14 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
       </div>
       
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Value</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">{t('chartSettings.value')}</label>
         <select
           value={settings.value}
           onChange={(e) => handleSettingChange('value', e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm"
           style={{color: '#111827'}}
         >
-          <option value="">Select a column</option>
+          <option value="">{t('chartSettings.selectColumn')}</option>
           {availableColumns.map(column => (
             <option key={column} value={column}>{column}</option>
           ))}
@@ -266,7 +284,7 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
   // Add a renderTableSettings function
   const renderTableSettings = () => (
     <div className="mb-3">
-      <label className="block text-sm font-medium text-gray-700 mb-1">Columns to Display</label>
+      <label className="block text-sm font-medium text-gray-700 mb-1">{t('chartSettings.columnsToDisplay')}</label>
       <div className="max-h-64 overflow-y-auto border border-gray-300 rounded-md p-2">
         {availableColumns.map(column => (
           <div key={column} className="flex items-center py-1">
@@ -293,8 +311,8 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
       </div>
       <p className="text-xs text-gray-500 mt-1">
         {settings.columns?.length 
-          ? `Selected ${settings.columns.length} of ${availableColumns.length} columns` 
-          : 'No columns selected (all will be shown)'}
+          ? t('chartSettings.selectedColumns', { count: settings.columns.length, total: availableColumns.length })
+          : t('chartSettings.noColumnsSelectedAll')}
       </p>
     </div>
   );
@@ -311,7 +329,7 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
       case 'table':
         return renderTableSettings();
       default:
-        return <p>No settings available for this widget type.</p>;
+        return <p>{t('chartSettings.noSettingsAvailable')}</p>;
     }
   };
 
@@ -319,32 +337,26 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
     <div className="space-y-3 text-gray-800 overflow-hidden">
       <div className="grid grid-cols-1 gap-3">
         <div>
-          {/* <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="widgetTitle">
-            Widget Title
-          </label> */}
           <input
             id="widgetTitle"
             type="text"
             value={title}
             onChange={handleTitleChange}
-            className="w-full my-[10px] border border-gray-300 rounded-md shadow-sm text-sm form-field"
-            placeholder="Widget Title"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm form-field"
+            placeholder={t('widgetSettings.widgetTitlePlaceholder')}
             style={{color: '#111827'}}
           />
         </div>
         
         <div>
-          {/* <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="dataSource">
-            Data Source
-          </label> */}
           <select
             id="dataSource"
             value={selectedDataSource}
             onChange={handleDataSourceChange}
-            className="w-full my-[10px] px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm"
+            className="w-full my-2 px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm"
             style={{color: '#111827'}}
           >
-            <option value="">Select a data source</option>
+            <option value="">{t('chartSettings.selectDataSource')}</option>
             {dataSources.map(ds => (
               <option key={ds.id} value={ds.id}>{ds.name}</option>
             ))}
@@ -354,7 +366,7 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
       
       {selectedDataSource && (
         <div className="border-t border-gray-200 pt-3 mt-3">
-          <h5 className="font-medium text-gray-700 mb-3">Chart Settings</h5>
+          <h5 className="font-medium text-gray-700 mb-3">{t('chartSettings.title')}</h5>
           {renderChartSettings()}
           
           <div className="flex items-center mt-2">
@@ -367,7 +379,7 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
               style={{ width: 'auto', padding: '0' }}
             />
             <label htmlFor="showLegend" className="ml-2 block text-sm text-gray-700">
-              Show Legend
+              {t('chartSettings.showLegend')}
             </label>
           </div>
         </div>
@@ -379,7 +391,7 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
-            Saved
+            {t('chartSettings.saved', { ns: 'common' })}
           </span>
         )}
         {saveStatus === 'error' && (
@@ -387,7 +399,7 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
-            Error
+            {t('chartSettings.error', { ns: 'common' })}
           </span>
         )}
         <button
@@ -400,7 +412,7 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
             }
           `}
         >
-          {saveStatus === 'saving' ? 'Saving...' : 'Save Changes'}
+          {saveStatus === 'saving' ? t('app.saving', { ns: 'common' }) : t('chartSettings.saveChanges')}
         </button>
       </div>
     </div>

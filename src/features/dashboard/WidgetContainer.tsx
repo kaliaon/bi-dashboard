@@ -6,6 +6,7 @@ import PieChartWidget from '@/features/charts/PieChartWidget';
 import TableChartWidget from '@/features/charts/TableChartWidget';
 import { useDataStore } from '@/store/dataStore';
 import { useModalStore } from '@/store/modalStore';
+import { useTranslation } from 'react-i18next';
 
 interface WidgetContainerProps {
   widget: Widget;
@@ -14,6 +15,7 @@ interface WidgetContainerProps {
 }
 
 export default function WidgetContainer({ widget, isEditing, onDelete }: WidgetContainerProps) {
+  const { t } = useTranslation(['dashboard', 'common']);
   const { getDataSourceById } = useDataStore();
   const { openWidgetSettings } = useModalStore();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -28,7 +30,7 @@ export default function WidgetContainer({ widget, isEditing, onDelete }: WidgetC
     if (!dataSource && widget.type !== 'text') {
       return (
         <div className="h-full flex items-center justify-center text-gray-500">
-          <p>No data source selected</p>
+          <p>{t('widgetSettings.noDataSource')}</p>
         </div>
       );
     }
@@ -45,11 +47,11 @@ export default function WidgetContainer({ widget, isEditing, onDelete }: WidgetC
       case 'text':
         return (
           <div className="p-4 h-full overflow-auto">
-            <div dangerouslySetInnerHTML={{ __html: widget.config.content || 'No content' }} />
+            <div dangerouslySetInnerHTML={{ __html: widget.config.content || t('noContent') }} />
           </div>
         );
       default:
-        return <div>Unknown widget type</div>;
+        return <div>{t('unknownWidgetType')}</div>;
     }
   };
 
@@ -82,16 +84,16 @@ export default function WidgetContainer({ widget, isEditing, onDelete }: WidgetC
           >
             <button
               onClick={handleSettingsClick}
-              className="px-2 py-1 text-sm font-medium rounded border shadow-sm bg-white text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+              className="px-2 py-1 text-sm font-medium rounded border shadow-sm bg-white text-blue-600 hover:bg-blue-50 border-blue-200 focus:outline-none focus:ring-1 focus:ring-blue-200"
             >
-              Settings
+              {t('widgetActions.edit')}
             </button>
             {onDelete && (
               <button
                 onClick={handleDeleteClick}
-                className="px-2 py-1 text-sm font-medium rounded border shadow-sm bg-white text-red-600 hover:bg-red-50"
+                className="px-2 py-1 text-sm font-medium rounded border shadow-sm bg-white text-red-600 hover:bg-red-50 border-red-200 focus:outline-none focus:ring-1 focus:ring-red-200"
               >
-                Delete
+                {t('widgetActions.delete')}
               </button>
             )}
           </div>

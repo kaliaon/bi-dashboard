@@ -3,8 +3,10 @@ import { useModalStore } from '@/store/modalStore';
 import Modal from '@/components/Modal';
 import WidgetSettings from './WidgetSettings';
 import { useDashboardStore } from '@/store/dashboardStore';
+import { useTranslation } from 'react-i18next';
 
 export default function GlobalWidgetSettingsModal() {
+  const { t } = useTranslation('dashboard');
   const { 
     isWidgetSettingsOpen, 
     currentWidget, 
@@ -28,7 +30,7 @@ export default function GlobalWidgetSettingsModal() {
     <Modal
       isOpen={isWidgetSettingsOpen && !!updatedWidget}
       onClose={closeWidgetSettings}
-      title={`Edit Widget: ${updatedWidget?.title || 'Widget'}`}
+      title={t('editWidgetTitle', { name: updatedWidget?.title || t('widget') })}
       width="w-[600px]"
       disableScroll={true}
     >

@@ -1,32 +1,37 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import MainLayout from '@/layouts/MainLayout'
 import DashboardPage from '@/pages/DashboardPage'
 import ImportPage from '@/pages/ImportPage'
 import SettingsPage from '@/pages/SettingsPage'
+import BIViewPage from '@/pages/BIViewPage'
 
 // Simple routing implementation
-type Route = 'dashboard' | 'import' | 'settings'
+type Route = 'dashboard' | 'import' | 'settings' | 'bi-view'
 
 function App() {
   const [currentRoute, setCurrentRoute] = useState<Route>('dashboard')
+  const { t } = useTranslation(['navigation', 'common'])
 
   const getPageTitle = () => {
     switch (currentRoute) {
       case 'dashboard':
-        return 'Dashboard'
+        return t('dashboard')
       case 'import':
-        return 'Data Sources'
+        return t('dataSources')
       case 'settings':
-        return 'Settings'
+        return t('settings')
+      case 'bi-view':
+        return t('biView')
       default:
-        return 'Dashboard'
+        return t('dashboard')
     }
   }
 
   // Update document title when route changes
   useEffect(() => {
-    document.title = `${getPageTitle()} | Data Dashboard`;
-  }, [currentRoute]);
+    document.title = `${getPageTitle()} | ${t('app.title', { ns: 'common' })}`;
+  }, [currentRoute, t]);
 
   const renderPage = () => {
     switch (currentRoute) {
@@ -36,6 +41,8 @@ function App() {
         return <ImportPage />
       case 'settings':
         return <SettingsPage />
+      case 'bi-view':
+        return <BIViewPage />
       default:
         return <DashboardPage />
     }

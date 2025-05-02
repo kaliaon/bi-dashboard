@@ -1,0 +1,54 @@
+{
+  "title": "Settings",
+  "subtitle": "Configure your dashboard settings",
+  "appearance": {
+    "title": "Appearance",
+    "theme": "Theme",
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System Default"
+    },
+    "gridSize": "Grid Size",
+    "compact": "Compact",
+    "default": "Default",
+    "comfortable": "Comfortable"
+  },
+  "language": {
+    "title": "Language",
+    "selectLanguage": "Select Language",
+    "languages": {
+      "en": "English",
+      "kk": "Kazakh",
+      "ru": "Russian"
+    }
+  },
+  "dataManagement": {
+    "title": "Data Management",
+    "autoRefresh": "Auto Refresh",
+    "refreshInterval": "Refresh Interval",
+    "clearCache": "Clear Cache",
+    "exportAllData": "Export All Data",
+    "clearConfirmation": "Are you sure you want to clear all dashboard data? This action cannot be undone."
+  },
+  "account": {
+    "title": "Account",
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "profile": "Profile",
+    "preferences": "Preferences"
+  },
+  "dashboardSettings": "Dashboard Settings",
+  "dashboardName": "Dashboard Name",
+  "exportFormat": "Export Format",
+  "exportDescription": "Export your dashboard configuration to a file that you can import later or share with others.",
+  "exportJsonDescription": "Export as JSON to save all dashboard data and configuration.",
+  "exportPdfDescription": "Export as PDF to create a document of your dashboard visualizations.",
+  "exportImageDescription": "Export as PNG image to share a snapshot of your dashboard.",
+  "exportDashboard": "Export Dashboard",
+  "importDashboard": "Import Dashboard",
+  "dangerZone": "Danger Zone",
+  "clearAllData": "Clear All Data",
+  "clearDataWarning": "This will delete all dashboard widgets, data sources, and configurations. This action cannot be undone.",
+  "clearDashboardData": "Clear Dashboard Data"
+} 

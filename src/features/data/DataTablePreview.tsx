@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDataStore } from '@/store/dataStore';
 
 interface DataTablePreviewProps {
@@ -12,6 +13,7 @@ export default function DataTablePreview({
   dataSourceId,
   maxRows = 10,
 }: DataTablePreviewProps) {
+  const { t } = useTranslation('import');
   const { dataSources, activeDataSource } = useDataStore();
 
   // Get the data source to display
@@ -32,7 +34,7 @@ export default function DataTablePreview({
   if (!dataSource) {
     return (
       <div className="text-center py-6 text-gray-500">
-        <p>No data source available</p>
+        <p>{t('noDataSourceAvailable', 'No data source available')}</p>
       </div>
     );
   }
@@ -44,7 +46,7 @@ export default function DataTablePreview({
     <div className="bg-white rounded-md border border-gray-200 overflow-hidden">
       <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
         <h3 className="text-lg font-medium text-gray-700">
-          {dataSource.name} <span className="text-gray-500 text-sm">({dataSource.data.length} rows)</span>
+          {dataSource.name} <span className="text-gray-500 text-sm">({t('rowCount', '{{count}} rows', { count: dataSource.data.length })})</span>
         </h3>
       </div>
       
@@ -79,7 +81,7 @@ export default function DataTablePreview({
       
       {dataSource.data.length > maxRows && (
         <div className="bg-gray-50 px-4 py-3 border-t border-gray-200 text-center text-sm text-gray-500">
-          Showing {maxRows} of {dataSource.data.length} rows
+          {t('showingRows', 'Showing {{showing}} of {{total}} rows', { showing: maxRows, total: dataSource.data.length })}
         </div>
       )}
     </div>

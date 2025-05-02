@@ -1,8 +1,10 @@
 import { useState, useRef, ChangeEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useCSVParser } from '@/hooks/useCSVParser';
 import DataTablePreview from './DataTablePreview';
 
 export default function CSVImporter() {
+  const { t } = useTranslation(['import', 'common']);
   const [file, setFile] = useState<File | null>(null);
   const [dataSourceName, setDataSourceName] = useState<string>('');
   const [isDragOver, setIsDragOver] = useState(false);
@@ -71,17 +73,17 @@ export default function CSVImporter() {
     return (
       <div className="p-6">
         <div className="mb-6 flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Import Successful</h2>
+          <h2 className="text-2xl font-bold">{t('importSuccess', 'Import Successful')}</h2>
           <button
             onClick={handleReset}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >
-            Import Another File
+            {t('importAnother', 'Import Another File')}
           </button>
         </div>
         <div className="bg-green-50 border border-green-200 rounded-md p-4 mb-6">
           <p className="text-green-800">
-            <span className="font-medium">Success!</span> Your CSV data has been imported and is now available for use in your dashboard.
+            <span className="font-medium">{t('app.success', { ns: 'common' })}!</span> {t('successMessage', 'Your CSV data has been imported and is now available for use in your dashboard.')}
           </p>
         </div>
         <DataTablePreview dataSourceName={dataSourceName} />
@@ -91,12 +93,12 @@ export default function CSVImporter() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6">Import CSV Data</h2>
+      <h2 className="text-2xl font-bold mb-6">{t('importCSV', 'Import CSV Data')}</h2>
       
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
           <p className="text-red-800">
-            <span className="font-medium">Error:</span> {error.message}
+            <span className="font-medium">{t('app.error', { ns: 'common' })}:</span> {error.message}
           </p>
         </div>
       )}
@@ -125,10 +127,10 @@ export default function CSVImporter() {
           />
         </svg>
         <p className="text-lg text-gray-600 mb-2">
-          {file ? file.name : 'Drag & drop your CSV file here'}
+          {file ? file.name : t('dataSourceSettings.dragAndDrop')}
         </p>
         <p className="text-sm text-gray-500 mb-4">
-          {file ? `${(file.size / 1024).toFixed(2)} KB` : 'or click to browse files'}
+          {file ? `${(file.size / 1024).toFixed(2)} KB` : t('clickToBrowse', 'or click to browse files')}
         </p>
         <input
           type="file"
@@ -143,7 +145,7 @@ export default function CSVImporter() {
         <div className="mt-6">
           <div className="mb-4">
             <label htmlFor="dataSourceName" className="block text-sm font-medium text-gray-700">
-              Data Source Name
+              {t('dataSourceSettings.dataSourceName')}
             </label>
             <input
               type="text"
@@ -151,7 +153,7 @@ export default function CSVImporter() {
               value={dataSourceName}
               onChange={(e) => setDataSourceName(e.target.value)}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="Enter a name for this data source"
+              placeholder={t('dataSourceSettings.dataSourceNamePlaceholder')}
             />
           </div>
           
@@ -164,7 +166,7 @@ export default function CSVImporter() {
                 : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
             }`}
           >
-            {isLoading ? 'Importing...' : 'Import Data'}
+            {isLoading ? t('app.loading', 'Importing...', { ns: 'common' }) : t('import')}
           </button>
         </div>
       )}

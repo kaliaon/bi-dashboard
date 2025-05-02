@@ -3,6 +3,7 @@ import { Responsive, WidthProvider, Layout } from 'react-grid-layout';
 import '@/grid-styles.css';
 import { useDashboardStore, Widget } from '@/store/dashboardStore';
 import WidgetContainer from './WidgetContainer';
+import { useTranslation } from 'react-i18next';
 
 // Use the standard ResponsiveGridLayout without the WidthProvider
 // We'll handle width calculation ourselves for better precision
@@ -13,6 +14,7 @@ interface DashboardGridProps {
 }
 
 export default function DashboardGrid({ className }: DashboardGridProps) {
+  const { t } = useTranslation(['dashboard', 'common']);
   const { widgets, updateWidgetLayout, removeWidget } = useDashboardStore();
   const [isEditing, setIsEditing] = useState(false);
   const gridContainerRef = useRef<HTMLDivElement>(null);
@@ -73,32 +75,32 @@ export default function DashboardGrid({ className }: DashboardGridProps) {
   // Handle widget deletion
   const handleDeleteWidget = useCallback((widgetId: string) => {
     // Confirm before deleting
-    if (window.confirm('Are you sure you want to delete this widget?')) {
+    if (window.confirm(t('confirmDeleteWidget', 'Are you sure you want to delete this widget?'))) {
       removeWidget(widgetId);
     }
-  }, [removeWidget]);
+  }, [removeWidget, t]);
 
   return (
     <div className="flex flex-col w-full h-full bg-white relative">
       {/* Floating edit button in top right corner */}
       <button
-        className="absolute top-4 right-4 left-auto px-1 py-1 bg-slate-900 text-white rounded-md hover:bg-slate-800 transition-colors text-sm z-10 shadow-md"
+        className="absolute top-4 right-4 left-auto px-2 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm z-10 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-200"
         onClick={() => setIsEditing(!isEditing)}
         style={{ right: '1rem', left: 'auto' }}
       >
-        {isEditing ? 'Save Layout' : 'Edit Layout'}
+        {isEditing ? t('saveLayout') : t('editLayout')}
       </button>
 
       <div 
+        id="dashboard-grid"
         ref={gridContainerRef} 
         className="flex-1 w-full h-full p-0"
       >
         {widgets.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-gray-500">
-            <p className="text-xl mb-4">No widgets added yet</p>
-            <p>
-              Get started by clicking the "Add Widget" button to create your first
-              visualization.
+            <p className="text-xl mb-4">{t('noWidgets')}</p>
+            <p className="text-sm">
+              {t('getStarted')}
             </p>
           </div>
         ) : (

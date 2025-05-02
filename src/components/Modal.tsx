@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ModalProps {
   isOpen: boolean;
@@ -19,6 +20,7 @@ export default function Modal({
   height = 'max-h-[90%]',
   disableScroll = false,
 }: ModalProps) {
+  const { t } = useTranslation('common');
   const modalRef = useRef<HTMLDivElement>(null);
 
   // Close when clicking outside the modal
@@ -95,11 +97,11 @@ export default function Modal({
       >
         <div className="sticky top-0 px-4 py-3 border-b flex justify-between items-center px-[20px]" 
              style={{backgroundColor: 'white', borderBottomColor: '#e5e7eb'}}>
-          <h4 className="font-medium text-lg text-gray-800 ">{title}</h4>
+          <h4 className="font-medium text-lg text-gray-800">{title}</h4>
           <button 
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
-            aria-label="Close modal"
+            aria-label={t('app.close')}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />

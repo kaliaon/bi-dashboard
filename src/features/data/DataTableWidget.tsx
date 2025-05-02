@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import { Widget } from '@/store/dashboardStore';
 import { useDataStore } from '@/store/dataStore';
 import { filterData } from '@/services/dataService';
@@ -7,10 +7,14 @@ interface DataTableWidgetProps {
   widget: Widget;
 }
 
+// Approximate row height in pixels (header + data row)
+const ROW_HEIGHT = 42; // Adjust based on your actual row height
+
 export default function DataTableWidget({ widget }: DataTableWidgetProps) {
   const { getDataSourceById } = useDataStore();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const containerRef = useRef<HTMLDivElement>(null);
   
   const { tableData, columns } = useMemo(() => {
     if (!widget.dataSource) {
@@ -39,6 +43,38 @@ export default function DataTableWidget({ widget }: DataTableWidgetProps) {
     };
   }, [widget, getDataSourceById]);
 
+  // Calculate visible rows based on container height
+  useEffect(() => {
+    const updateVisibleRows = () => {
+      if (containerRef.current) {
+        const containerHeight = containerRef.current.clientHeight;
+        // Subtract header height and pagination control height
+        const availableHeight = containerHeight - 40 - 48; // header ~40px, pagination ~48px
+        const calculatedRows = Math.max(1, Math.floor(availableHeight / ROW_HEIGHT));
+        
+        // Only update if changed significantly to avoid constant updates
+        if (Math.abs(calculatedRows - rowsPerPage) > 1) {
+          setRowsPerPage(calculatedRows);
+          setPage(0); // Reset to first page when changing rows per page
+        }
+      }
+    };
+
+    // Initial calculation
+    updateVisibleRows();
+
+    // Set up ResizeObserver to recalculate on container resize
+    const resizeObserver = new ResizeObserver(updateVisibleRows);
+    
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [rowsPerPage]);
+
   // Handle the case when there's no data
   if (tableData.length === 0) {
     return (
@@ -62,7 +98,7 @@ export default function DataTableWidget({ widget }: DataTableWidgetProps) {
   const totalPages = Math.ceil(tableData.length / rowsPerPage);
 
   return (
-    <div className="h-full flex flex-col">
+    <div ref={containerRef} className="h-full flex flex-col">
       <div className="flex-1 overflow-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50 sticky top-0">
@@ -88,103 +124,72 @@ export default function DataTableWidget({ widget }: DataTableWidgetProps) {
                 ))}
               </tr>
             ))}
+            {/* Add empty rows to fill space when fewer rows than rowsPerPage */}
+            {paginatedData.length < rowsPerPage && Array.from({ length: rowsPerPage - paginatedData.length }).map((_, i) => (
+              <tr key={`empty-${i}`} className={(paginatedData.length + i) % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                {columns.map((column, colIndex) => (
+                  <td key={`empty-${i}-${colIndex}`} className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                    &nbsp;
+                  </td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
       
       {/* Pagination controls */}
-      <div className="border-t flex items-center justify-between px-4 py-3 bg-white">
-        <div className="flex-1 flex justify-between sm:hidden">
+      <div className="border-t flex items-center justify-center px-4 py-2 bg-white sticky bottom-0">
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => setPage(0)}
+            disabled={page === 0}
+            className={`relative inline-flex items-center justify-center p-1.5 rounded-full bg-transparent border-0 ${
+              page === 0 ? 'opacity-30 cursor-not-allowed' : 'text-gray-800 hover:text-blue-600'
+            }`}
+            aria-label="First page"
+            style={{ background: 'transparent' }}
+          >
+            &laquo;&laquo;
+          </button>
           <button
             onClick={() => setPage(Math.max(0, page - 1))}
             disabled={page === 0}
-            className={`relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${
-              page === 0 ? 'text-gray-400 bg-gray-100' : 'text-gray-700 bg-white hover:bg-gray-50'
+            className={`relative inline-flex items-center justify-center p-1.5 rounded-full bg-transparent border-0 ${
+              page === 0 ? 'opacity-30 cursor-not-allowed' : 'text-gray-800 hover:text-blue-600'
             }`}
+            aria-label="Previous page"
+            style={{ background: 'transparent' }}
           >
-            Previous
+            &laquo;
           </button>
+          
+          <div className="px-2 text-sm font-medium text-gray-700">
+            {page + 1} / {totalPages}
+          </div>
+          
           <button
             onClick={() => setPage(Math.min(totalPages - 1, page + 1))}
             disabled={page >= totalPages - 1}
-            className={`ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md ${
-              page >= totalPages - 1 ? 'text-gray-400 bg-gray-100' : 'text-gray-700 bg-white hover:bg-gray-50'
+            className={`relative inline-flex items-center justify-center p-1.5 rounded-full bg-transparent border-0 ${
+              page >= totalPages - 1 ? 'opacity-30 cursor-not-allowed' : 'text-gray-800 hover:text-blue-600'
             }`}
+            aria-label="Next page"
+            style={{ background: 'transparent' }}
           >
-            Next
+            &raquo;
           </button>
-        </div>
-        <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-          <div>
-            <p className="text-sm text-gray-700">
-              Showing <span className="font-medium">{start + 1}</span> to{' '}
-              <span className="font-medium">{Math.min(end, tableData.length)}</span> of{' '}
-              <span className="font-medium">{tableData.length}</span> results
-            </p>
-          </div>
-          <div>
-            <select
-              value={rowsPerPage}
-              onChange={(e) => {
-                setRowsPerPage(Number(e.target.value));
-                setPage(0); // Reset to first page on rows per page change
-              }}
-              className="mr-4 inline-flex items-center px-2 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-            >
-              <option value={5}>5 per page</option>
-              <option value={10}>10 per page</option>
-              <option value={25}>25 per page</option>
-              <option value={50}>50 per page</option>
-            </select>
-          
-            <nav className="inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-              <button
-                onClick={() => setPage(Math.max(0, page - 1))}
-                disabled={page === 0}
-                className={`relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium ${
-                  page === 0 ? 'text-gray-300' : 'text-gray-500 hover:bg-gray-50'
-                }`}
-              >
-                &laquo;
-              </button>
-              {Array.from({ length: Math.min(5, totalPages) }).map((_, i) => {
-                // Show pages around current page
-                let pageNum: number;
-                if (totalPages <= 5) {
-                  pageNum = i;
-                } else if (page < 3) {
-                  pageNum = i;
-                } else if (page > totalPages - 4) {
-                  pageNum = totalPages - 5 + i;
-                } else {
-                  pageNum = page - 2 + i;
-                }
-                
-                return (
-                  <button
-                    key={pageNum}
-                    onClick={() => setPage(pageNum)}
-                    className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                      page === pageNum
-                        ? 'z-10 bg-blue-50 border-blue-500 text-blue-600'
-                        : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
-                    }`}
-                  >
-                    {pageNum + 1}
-                  </button>
-                );
-              })}
-              <button
-                onClick={() => setPage(Math.min(totalPages - 1, page + 1))}
-                disabled={page >= totalPages - 1}
-                className={`relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium ${
-                  page >= totalPages - 1 ? 'text-gray-300' : 'text-gray-500 hover:bg-gray-50'
-                }`}
-              >
-                &raquo;
-              </button>
-            </nav>
-          </div>
+          <button
+            onClick={() => setPage(totalPages - 1)}
+            disabled={page >= totalPages - 1}
+            className={`relative inline-flex items-center justify-center p-1.5 rounded-full bg-transparent border-0 ${
+              page >= totalPages - 1 ? 'opacity-30 cursor-not-allowed' : 'text-gray-800 hover:text-blue-600'
+            }`}
+            aria-label="Last page"
+            style={{ background: 'transparent' }}
+          >
+            &raquo;&raquo;
+          </button>
         </div>
       </div>
     </div>
