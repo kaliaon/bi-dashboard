@@ -137,22 +137,6 @@ export default function WidgetSettings({ widget, onSaved }: WidgetSettingsProps)
     }));
   };
 
-  // Handle multi-select values
-  const handleValuesChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const options = e.target.options;
-    const selectedValues: string[] = [];
-    
-    for (let i = 0; i < options.length; i++) {
-      if (options[i].selected) {
-        selectedValues.push(options[i].value);
-      }
-    }
-    
-    console.log('Selected values:', selectedValues);
-    
-    handleSettingChange('values', selectedValues);
-  };
-
   // Handle checkbox change
   const handleCheckboxChange = (setting: string, checked: boolean) => {
     handleSettingChange(setting, checked);

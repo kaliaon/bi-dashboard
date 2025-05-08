@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { Responsive, WidthProvider, Layout } from 'react-grid-layout';
+import { Responsive, Layout } from 'react-grid-layout';
 import '@/grid-styles.css';
-import { useDashboardStore, Widget } from '@/store/dashboardStore';
+import { useDashboardStore } from '@/store/dashboardStore';
 import WidgetContainer from './WidgetContainer';
 import { useTranslation } from 'react-i18next';
 
@@ -54,7 +54,7 @@ export default function DashboardGrid({ className }: DashboardGridProps) {
 
   // Handle layout change
   const handleLayoutChange = useCallback(
-    (currentLayout: Layout[], allLayouts: { [key: string]: Layout[] }) => {
+    (currentLayout: Layout[]) => {
       // Only update if we're in edit mode
       if (!isEditing) return;
 

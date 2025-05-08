@@ -100,7 +100,7 @@ export default function BarChartWidget({ widget }: BarChartWidgetProps) {
           ) : (
             // Single bar (if only a single value is provided)
             <Bar
-              dataKey={widget.config.values || widget.config.y}
+              dataKey={(widget.config.values || widget.config.y || "value") as string}
               fill={widget.config.colors?.[0] || '#8884d8'}
             />
           )}

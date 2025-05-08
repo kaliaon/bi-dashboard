@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Modal from '@/components/Modal';
 import { useDashboardStore, WidgetType } from '@/store/dashboardStore';
 import { nanoid } from 'nanoid';

@@ -9,10 +9,6 @@ import {
   ArrowUpDown,
   ArrowLeft,
   ArrowRight,
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
   MoveLeft,
   MoveRight
 } from 'lucide-react';
@@ -167,8 +163,8 @@ export default function TableChartWidget({ widget }: TableChartWidgetProps) {
   const totalPages = Math.ceil(sortedData.length / rowsPerPage);
 
   // Sort icon renderer
-  const renderSortIcon = (column: string) => {
-    if (sortState.column !== column) {
+  const renderSortIcon = (columnName: string) => {
+    if (sortState.column !== columnName) {
       return <ArrowUpDown className="ml-1 h-3 w-3 text-gray-400" />;
     }
     
@@ -211,7 +207,7 @@ export default function TableChartWidget({ widget }: TableChartWidgetProps) {
             {/* Add empty rows to fill space when fewer rows than rowsPerPage */}
             {paginatedData.length < rowsPerPage && Array.from({ length: rowsPerPage - paginatedData.length }).map((_, i) => (
               <tr key={`empty-${i}`} className={(paginatedData.length + i) % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                {columns.map((column, colIndex) => (
+                {columns.map((_, colIndex) => (
                   <td key={`empty-${i}-${colIndex}`} className="px-3 py-2 text-sm text-gray-300">
                     &nbsp;
                   </td>

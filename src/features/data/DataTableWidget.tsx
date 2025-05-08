@@ -127,7 +127,7 @@ export default function DataTableWidget({ widget }: DataTableWidgetProps) {
             {/* Add empty rows to fill space when fewer rows than rowsPerPage */}
             {paginatedData.length < rowsPerPage && Array.from({ length: rowsPerPage - paginatedData.length }).map((_, i) => (
               <tr key={`empty-${i}`} className={(paginatedData.length + i) % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                {columns.map((column, colIndex) => (
+                {columns.map((_, colIndex) => (
                   <td key={`empty-${i}-${colIndex}`} className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                     &nbsp;
                   </td>

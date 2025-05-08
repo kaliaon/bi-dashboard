@@ -606,7 +606,6 @@ const exportAsPdf = (name: string): Promise<void> => {
           }
           
           // Calculate slice position and dimensions
-          const sliceHeight = contentHeight; // Height of content area on page
           const yPos = i === 0 ? 20 : 10; // First page has title, others start at top
           
           // Create a temporary canvas to slice the image

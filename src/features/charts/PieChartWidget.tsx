@@ -104,9 +104,9 @@ export default function PieChartWidget({ widget }: PieChartWidgetProps) {
             label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
             outerRadius={80}
             fill="#8884d8"
-            dataKey="value"
+            dataKey={"value" as string}
           >
-            {chartData.map((entry, index) => (
+            {chartData.map((_, index) => (
               <Cell 
                 key={`cell-${index}`} 
                 fill={colors[index % colors.length]} 

@@ -4,9 +4,6 @@ import {
   LayoutDashboard, 
   Database, 
   Settings, 
-  Menu, 
-  PlusSquare, 
-  User,
   ChevronRight,
   ChevronLeft,
   BarChart3
